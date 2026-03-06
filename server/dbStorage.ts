@@ -2,14 +2,15 @@ import { db } from "./db";
 import { eq } from "drizzle-orm";
 import {
   blocks, checklistItems, evidences, stakeholders, stakeholderParticipation,
-  kpis, procedures, shareholderMetrics, demographicData, contracts,
+  kpis, procedures, shareholderMetrics, demographicData, contracts, feedback,
   type Block, type InsertBlock, type ChecklistItem, type InsertChecklistItem,
   type Evidence, type InsertEvidence, type Stakeholder, type InsertStakeholder,
   type StakeholderParticipation, type InsertStakeholderParticipation,
   type Kpi, type InsertKpi, type Procedure, type InsertProcedure,
   type ShareholderMetric, type InsertShareholderMetric,
   type DemographicData, type InsertDemographicData,
-  type Contract, type InsertContract
+  type Contract, type InsertContract,
+  type Feedback, type InsertFeedback
 } from "@shared/schema";
 import { IStorage } from "./storage";
 import { randomUUID } from "crypto";
@@ -266,6 +267,16 @@ export class DatabaseStorage implements IStorage {
   async deleteContract(id: string): Promise<boolean> {
     const result = await db.delete(contracts).where(eq(contracts.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getFeedback(): Promise<Feedback[]> {
+    return await db.select().from(feedback);
+  }
+
+  async createFeedback(insertFeedback: InsertFeedback): Promise<Feedback> {
+    const id = randomUUID();
+    const result = await db.insert(feedback).values({ ...insertFeedback, id }).returning();
+    return result[0];
   }
 
   private async recalculateBlockProgress(blockId: string): Promise<void> {

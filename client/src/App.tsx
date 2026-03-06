@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { PhilosophyBanner } from "@/components/philosophy-banner";
+import { FloatingButtons } from "@/components/floating-buttons";
 import Dashboard from "@/pages/dashboard";
 import Bloques from "@/pages/bloques";
 import BlockDetail from "@/pages/block-detail";
@@ -18,6 +19,7 @@ import KPIs from "@/pages/kpis";
 import Procedimientos from "@/pages/procedimientos";
 import Accionistas from "@/pages/accionistas";
 import Demografico from "@/pages/demografico";
+import FeedbackAdmin from "@/pages/feedback-admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,6 +35,7 @@ function Router() {
       <Route path="/procedimientos" component={Procedimientos} />
       <Route path="/accionistas" component={Accionistas} />
       <Route path="/demografico" component={Demografico} />
+      <Route path="/feedback" component={FeedbackAdmin} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -63,6 +66,7 @@ function App() {
                 </main>
               </div>
             </div>
+            <FloatingButtons />
             <PhilosophyBanner />
           </SidebarProvider>
           <Toaster />

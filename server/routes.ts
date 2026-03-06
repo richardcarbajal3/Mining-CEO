@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { dbStorage } from "./dbStorage";
-import { 
+import {
   insertBlockSchema,
   insertChecklistItemSchema,
   insertEvidenceSchema,
@@ -11,7 +11,8 @@ import {
   insertProcedureSchema,
   insertShareholderMetricSchema,
   insertDemographicDataSchema,
-  insertContractSchema
+  insertContractSchema,
+  insertFeedbackSchema
 } from "@shared/schema";
 
 const storage = dbStorage;
@@ -533,6 +534,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete contract" });
+    }
+  });
+
+  app.get("/api/feedback", async (req, res) => {
+    try {
+      const feedbackList = await storage.getFeedback();
+      res.json(feedbackList);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch feedback" });
+    }
+  });
+
+  app.post("/api/feedback", async (req, res) => {
+    try {
+      const validatedData = insertFeedbackSchema.parse(req.body);
+      const feedbackItem = await storage.createFeedback(validatedData);
+      res.status(201).json(feedbackItem);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid feedback data" });
     }
   });
 

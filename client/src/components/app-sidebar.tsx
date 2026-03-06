@@ -1,14 +1,15 @@
 import { Link, useLocation } from "wouter";
-import { 
-  LayoutDashboard, 
-  FileCheck, 
-  Users, 
-  FolderOpen, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  FileCheck,
+  Users,
+  FolderOpen,
+  BarChart3,
   BookOpen,
   TrendingUp,
   MapPin,
-  FileText
+  FileText,
+  MessageSquare
 } from "lucide-react";
 import {
   Sidebar,
@@ -69,6 +70,11 @@ const menuItems = [
     title: "Social/Demográfico",
     url: "/demografico",
     icon: MapPin,
+  },
+  {
+    title: "Comentarios",
+    url: "/feedback",
+    icon: MessageSquare,
   },
 ];
 
