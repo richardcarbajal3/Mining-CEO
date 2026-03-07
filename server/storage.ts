@@ -1,4 +1,4 @@
-import { 
+import {
   type Block, type InsertBlock,
   type ChecklistItem, type InsertChecklistItem,
   type Evidence, type InsertEvidence,
@@ -7,7 +7,8 @@ import {
   type Kpi, type InsertKpi,
   type Procedure, type InsertProcedure,
   type ShareholderMetric, type InsertShareholderMetric,
-  type DemographicData, type InsertDemographicData
+  type DemographicData, type InsertDemographicData,
+  type Feedback, type InsertFeedback
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -58,6 +59,9 @@ export interface IStorage {
   createDemographicData(data: InsertDemographicData): Promise<DemographicData>;
   updateDemographicData(id: string, updates: Partial<DemographicData>): Promise<DemographicData | undefined>;
   deleteDemographicData(id: string): Promise<boolean>;
+
+  getFeedback(): Promise<Feedback[]>;
+  createFeedback(feedback: InsertFeedback): Promise<Feedback>;
 }
 
 export class MemStorage implements IStorage {
@@ -653,6 +657,19 @@ export class MemStorage implements IStorage {
 
   async deleteDemographicData(id: string): Promise<boolean> {
     return this.demographicData.delete(id);
+  }
+
+  private feedbackItems: Map<string, Feedback> = new Map();
+
+  async getFeedback(): Promise<Feedback[]> {
+    return Array.from(this.feedbackItems.values());
+  }
+
+  async createFeedback(insertFeedback: InsertFeedback): Promise<Feedback> {
+    const id = randomUUID();
+    const item: Feedback = { ...insertFeedback, id, createdAt: new Date() };
+    this.feedbackItems.set(id, item);
+    return item;
   }
 
   private async recalculateBlockProgress(blockId: string): Promise<void> {
